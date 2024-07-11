@@ -1,0 +1,46 @@
+---
+- name: Install Apache for Debian and RedHat Using blocks
+  hosts: test_hosts
+  become: yes
+
+  vars:
+    src_file: ./site/index.html
+    dest_file: /var/www/html
+
+  tasks:
+  - block:      #========Block for Debian============
+      - name: Install Apache on Debian
+        package: name=apache2 state=latest
+
+      - name: Copy index.html for Debian server
+        copy: src={{ src_file }} dest={{ dest_file }}
+        notify: Restart Apache Debian
+
+      - name: Start Apache on Debian server
+        service: name=apache2 state=started enabled=yes
+
+    when: ansible_os_family == "Debian"      
+
+  - block:     #========Block for RedHat============
+      - name: Install Apache on RedHat
+        package: name=httpd state=latest
+
+      - name: Copy index.html on RedHat
+        copy: src={{ src_file }} dest={{ dest_file }}
+        notify: Restart Apache RedHat
+
+      - name: Start Apache on RedHat
+        service: name=httpd state=started enabled=yes
+    
+    when: ansible_os_family == "RedHat"
+
+
+  handlers:
+    - name: Restart Apache Debian
+      service: name=apache2 state=restarted
+
+    - name: Restart Apache RedHat
+      service: name=httpd state=restarted
+
+
+

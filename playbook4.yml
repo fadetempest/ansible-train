@@ -1,0 +1,36 @@
+---
+- name: Install Apache Web Server for Debian and RedHat
+  hosts: all
+  become: yes
+
+  vars:
+    src_file: ./site/index.html
+    dest_file: /var/www/html
+
+  tasks:
+  - name: Install Apache on Debian
+    package: name=apache2 state=latest
+    when: ansible_os_family == "Debian"
+
+  - name: Install Apache on RedHat
+    package: name=httpd state=latest
+    when: ansible_os_family == "RedHat"
+
+  - name: Copy index.html to servers
+    copy: src={{ src_file }} dest={{ dest_file }}
+    notify:
+    - Restart Apache RedHat
+    - Restart Apache Debian
+
+  - name: Starting Apache server Debian
+    service: name=apache2 state=started enabled=yes
+
+  - name: Start Apache server RedHat
+    service: name=httpd state=started enabled=yes
+
+  handlers:
+  - name: Restart Apache RedHat
+    service: name=httpd state=restarted
+
+  - name: Restart Apache Debian
+    service: name=apache2 state=restarted 
