@@ -1,0 +1,11 @@
+---
+- name   : Install and run Apache Web Server
+  hosts  : test_hosts
+  become : yes
+
+  tasks:
+  - name: Install Apache Web Server
+    package : name=apache2 state=present
+
+  - name: Start Apache Web Server
+    service: name=apache2 state=started enabled=yes

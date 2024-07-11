@@ -1,0 +1,26 @@
+---
+- name  : Install, run and configure Apache Web Server
+  hosts : test_hosts
+  become: yes
+
+  vars:
+    src_file : ./site/index.html
+    dest_file: /var/www/html
+
+  tasks:
+  - name: Install Apache Web Server
+    package: name=apache2 state=present
+
+  - name: Copy HTML page to server
+    copy: src="{{src_file}}" dest="{{dest_file}}" mode=0555 
+    changed_when: True
+    notify: Restart Apache
+
+  - name   : Configure Apache Web Server
+    service: name=apache2 state=started enabled=yes
+
+
+  handlers:
+  - name  : Restart Apache
+    service: name=apache2 state=restarted
+
