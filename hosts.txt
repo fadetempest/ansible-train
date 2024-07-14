@@ -1,0 +1,9 @@
+[test_hosts]
+Ubuntu22.04  ansible_host=192.168.0.117
+
+[prod_hosts]  
+CentOS7      ansible_host=192.168.0.118
+
+[all_hosts:children]
+test_hosts
+prod_hosts  
