@@ -1,0 +1,13 @@
+---
+- name: Test loops
+  hosts: test_hosts
+  become: yes
+
+  tasks:
+  - name: Loop with names
+    debug: 
+      msg: "Hello {{ item }}"
+    loop:
+     - "Vasya"
+     - "Petya"
+     - "Serega"
