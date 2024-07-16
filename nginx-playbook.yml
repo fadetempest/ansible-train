@@ -27,10 +27,10 @@
     notify:
       - Restart NGINX
     
-    - name: Check service started
-      systemd_service:
-        state: started
-        name: nginx
+  - name: Check service started
+    systemd_service:
+      state: started
+      name: nginx
 
 
   handlers:
