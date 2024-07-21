@@ -1,0 +1,25 @@
+---
+- name: Delete NGINX and Apache on Debian servers
+  hosts: test_hosts
+  become: yes
+
+  tasks:
+  - name: Delete NGINX
+    apt:
+      name: nginx
+      state: absent
+
+  - name: Stop NGINX services
+    service:
+      name: nginx
+      state: stopped
+
+  - name: Delete Apache2
+    apt:
+      name: apache2
+      state: absent
+
+  - name: Stop Apache2 services
+    service:
+      name: apache2
+      state: stopped

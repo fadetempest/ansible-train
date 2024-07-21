@@ -1,0 +1,14 @@
+---
+- name: For postgresql backups in docker container
+  hosts: test_hosts
+  become: yes
+
+  tasks:
+  - name: Create folder for backups
+    ansible.builtin.file:
+      path: /home/sergey/pg_backups
+      state: directory
+
+  - name: Exec shell command for backup
+    ansible.builtin.shell:
+      cmd: docker exec -t postgres-zabbix pg_dumpall -c -U zabbix > pg_backups/dump_`date +%Y-%m-%d"_"%H_%M_%S`.sql
