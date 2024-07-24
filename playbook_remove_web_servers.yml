@@ -4,22 +4,26 @@
   become: yes
 
   tasks:
-  - name: Delete NGINX
-    apt:
-      name: nginx
-      state: absent
+  - name: Stop Apache2 services
+    ansible.builtin.service:
+      name: apache2
+      state: stopped
+    ignore_errors: true
 
   - name: Stop NGINX services
-    service:
+    ansible.builtin.service:
       name: nginx
       state: stopped
+    ignore_errors: true
 
   - name: Delete Apache2
-    apt:
+    ansible.builtin.apt:
       name: apache2
       state: absent
+      purge: true
 
-  - name: Stop Apache2 services
-    service:
-      name: apache2
-      state: stopped
+  - name: Delete NGINX
+    ansible.builtin.apt:
+      name: nginx
+      state: absent
+      purge: true
