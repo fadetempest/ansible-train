@@ -2,8 +2,8 @@
 Ubuntu22.04  ansible_host=192.168.0.117
 
 [prod_hosts]  
-CentOS7      ansible_host=192.168.0.118
+Ubuntu22.04-Jenkins ansible_host=192.168.0.129
 
 [all_hosts:children]
 test_hosts
-prod_hosts  
+prod_hosts

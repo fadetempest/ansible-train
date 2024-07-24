@@ -1,0 +1,39 @@
+---
+- name: Install zabbix agent on Debian-like OS
+  hosts: prod_hosts
+  become: yes
+
+  tasks:
+  - name: Install zabbix agent
+    ansible.builtin.apt: 
+      name: zabbix-agent 
+      state: latest
+
+  - name: Rewrite zabbix agent conf file (Set ServerActive)
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      search_string: "ServerActive=127.0.0.1"
+      line: "ServerActive=192.168.0.117"
+
+  - name: Rewrite zabbix agent conf file (Set Server)
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      search_string: "Server=127.0.0.1"
+      line: "Server=192.168.0.117"
+
+  - name: Rewrite host name in config file
+    ansible.builtin.lineinfile:
+      path: /etc/zabbix/zabbix_agentd.conf
+      search_string: "Hostname="
+      line: "Hostname=Jenkins_Server"
+
+  - name: Restart zabbix agent
+    ansible.builtin.service:
+      name: zabbix-agent
+      state: restarted
+
+  - name: Open 10050 port
+    community.general.ufw:
+      rule: allow
+      port: '10050'
+      proto: tcp
